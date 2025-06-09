@@ -193,16 +193,17 @@ static void print_all_libs_info(int flags, int level)
 
 static void print_program_info(int flags, int level)
 {
-    const char *indent = flags & INDENT? "  " : "";
+    const char *cyan  = "\033[36m";
+    const char *reset = "\033[0m";
 
-    av_log(NULL, level, "%s version " FFMPEG_VERSION, program_name);
-    if (flags & SHOW_COPYRIGHT)
-        av_log(NULL, level, " Copyright (c) %d-%d the FFmpeg developers",
-               program_birth_year, CONFIG_THIS_YEAR);
-    av_log(NULL, level, "\n");
-    av_log(NULL, level, "%sbuilt with %s\n", indent, CC_IDENT);
+    av_log(NULL, level, "%s(此版本由 chrelyonly 编译打包，仅用于学习使用，禁非法用途)%s\n", cyan, reset);
 
-    av_log(NULL, level, "%sconfiguration: " FFMPEG_CONFIGURATION "\n", indent);
+    // 🧾 插入自定义编译者说明与时间
+    time_t now = time(NULL);
+    struct tm *t = localtime(&now);
+    char timebuf[64];
+    strftime(timebuf, sizeof(timebuf), "%Y-%m-%d %H:%M:%S", t);
+    av_log(NULL, level, "%s编译时间: %s%s\n", cyan, timebuf, reset);
 }
 
 static void print_buildconf(int flags, int level)
